@@ -6,4 +6,5 @@
 
     <color name="colorHighlight">#C4C4C4</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorToolbarControlNormal">#000000</color>
 </resources>
