@@ -69,6 +69,25 @@
                     android:text="10" />
             </LinearLayout>
         </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="#212121"
+            android:text="UPCOMING EXERCISE: "
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_upcoming_exercise_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="#212121"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:text="Exercise Name" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -78,9 +97,22 @@
         android:layout_below="@id/toolbar_exercise_activity"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_marginBottom="10dp"
         android:visibility="gone"
         tools:visibility="visible">
+        
+        <ImageView
+            android:id="@+id/iv_exercise"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/image"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_jumping_jacks"
+            />
+        
         <TextView
+            android:id="@+id/tv_exercise_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="[exercise name]"

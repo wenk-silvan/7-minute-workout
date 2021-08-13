@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_exercise.*
 
 class ExerciseActivity : AppCompatActivity() {
@@ -11,6 +12,8 @@ class ExerciseActivity : AppCompatActivity() {
     private var restProgress = 0
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseProgress = 0
+    private var exerciseList: ArrayList<ExerciseModel>? = null
+    private var currentExercisePosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +24,7 @@ class ExerciseActivity : AppCompatActivity() {
         toolbar_exercise_activity.setNavigationOnClickListener {
             onBackPressed()
         }
+        this.exerciseList = Constants.defaultExerciseList()
         this.setupRestView()
     }
 
@@ -34,27 +38,37 @@ class ExerciseActivity : AppCompatActivity() {
 
     private fun setRestProgressBar() {
         pb_rest.progress = this.restProgress
-        this.restTimer = object: CountDownTimer(10000, 1000) {
+        this.restTimer = object : CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 restProgress++
                 pb_rest.progress = 10 - restProgress
                 tv_timer_rest.text = (10 - restProgress).toString()
             }
 
-            override fun onFinish() = setupExerciseView()
+            override fun onFinish() {
+                currentExercisePosition++
+                setupExerciseView()
+            }
         }.start()
     }
 
     private fun setExerciseProgressBar() {
         pb_exercise.progress = this.exerciseProgress
-        this.exerciseTimer = object: CountDownTimer(30000, 1000) {
+        this.exerciseTimer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                exerciseProgress++
-                pb_exercise.progress = 30 - exerciseProgress
-                tv_timer_exercise.text = (30 - exerciseProgress).toString()
+                this@ExerciseActivity.exerciseProgress++
+                pb_exercise.progress = 30 - this@ExerciseActivity.exerciseProgress
+                tv_timer_exercise.text = (30 - this@ExerciseActivity.exerciseProgress).toString()
             }
 
-            override fun onFinish() = setupRestView()
+            override fun onFinish() {
+                if (currentExercisePosition < this@ExerciseActivity.exerciseList?.size!! - 1) {
+                    setupRestView()
+                } else {
+                    Toast.makeText(this@ExerciseActivity, "Congratulations!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }.start()
     }
 
@@ -66,6 +80,8 @@ class ExerciseActivity : AppCompatActivity() {
             this.restTimer!!.cancel()
             this.restProgress = 0
         }
+        tv_upcoming_exercise_name.text =
+            this.exerciseList!![this.currentExercisePosition + 1].getName()
         this.setRestProgressBar()
     }
 
@@ -78,5 +94,7 @@ class ExerciseActivity : AppCompatActivity() {
             this.exerciseProgress = 0
         }
         this.setExerciseProgressBar()
+        iv_exercise.setImageResource(this.exerciseList!![this.currentExercisePosition].getImage())
+        tv_exercise_name.text = this.exerciseList!![this.currentExercisePosition].getName()
     }
 }
